@@ -17,7 +17,7 @@ exports.authenticate = async (req, res, next) => {
             return res.status(401).json({ mensaje: 'Acceso no autorizado' });
         }
 
-        req.usuario = usuario;
+        req.usuario = decoded;
         next();
     } catch (error) {
         res.status(401).json({ mensaje: 'Acceso no autorizado' });
