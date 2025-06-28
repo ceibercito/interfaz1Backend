@@ -23,6 +23,22 @@ const Usuario = sequelize.define('Usuario', {
     }
 });
 
+// Hashear la contraseña antes de crear el usuario
+Usuario.beforeCreate(async (usuario, options) => {
+    const bcrypt = require('bcryptjs');
+    if (usuario.password) {
+        const salt = await bcrypt.genSalt(10);
+        usuario.password = await bcrypt.hash(usuario.password, salt);
+        console.log('Contraseña hasheada:', usuario.password);
+    }
+});
+
+// Agrega este método al prototipo del modelo
+Usuario.prototype.validarPassword = async function(password) {
+    const bcrypt = require('bcryptjs');
+    return await bcrypt.compare(password, this.password);
+};
+
 const Libro = sequelize.define('Libro', {
     id: {
         type: DataTypes.INTEGER,

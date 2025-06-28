@@ -44,19 +44,30 @@ exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        // Buscar usuario
         const usuario = await Usuario.findOne({ where: { email } });
         if (!usuario) {
             return res.status(401).json({ mensaje: 'Credenciales inválidas' });
         }
 
-        // Verificar contraseña
-        const passwordValido = await usuario.validarPassword(password);
+        // Log para depuración
+        console.log('Intentando login:', usuario.email, usuario.password);
+
+        if (!usuario.password) {
+            return res.status(500).json({ mensaje: 'El usuario no tiene contraseña registrada.' });
+        }
+
+        console.log('Password recibido:', password);
+        console.log('Password en base de datos:', usuario.password);
+
+        console.log('Tipo de usuario:', typeof usuario, usuario instanceof Usuario);
+        console.log('Métodos disponibles:', Object.getOwnPropertyNames(Object.getPrototypeOf(usuario)));
+
+        const bcrypt = require('bcryptjs');
+        const passwordValido = await bcrypt.compare(password, usuario.password);
         if (!passwordValido) {
             return res.status(401).json({ mensaje: 'Credenciales inválidas' });
         }
 
-        // Generar token JWT
         const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, config.JWT_SECRET, {
             expiresIn: '24h'
         });
