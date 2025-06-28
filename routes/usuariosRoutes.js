@@ -8,7 +8,7 @@ router.post('/register', validateUsuario, usuariosController.register);
 router.post('/login', usuariosController.login);
 
 // Rutas protegidas
-router.use(require('../middlewares/auth').authenticate);
+//router.use(require('../middlewares/auth').authenticate);
 
 router.get('/profile', usuariosController.getProfile);
 
