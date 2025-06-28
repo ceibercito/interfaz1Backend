@@ -2,17 +2,16 @@ const express = require('express');
 const router = express.Router();
 
 // Importar el controlador (si lo tienes)
-// const prestamosController = require('../controllers/prestamosController');
+const prestamosController = require('../controllers/prestamosController');
 
 // Ruta GET de ejemplo (ajusta según tu lógica)
-router.get('/', (req, res) => {
-    res.json({ message: "Lista de préstamos" });
-});
+// Listar todos los préstamos
+router.get('/', prestamosController.listarPrestamos);
 
-// Ruta POST de ejemplo
-router.post('/', (req, res) => {
-    res.json({ message: "Préstamo creado" });
-});
+// Crear nuevo préstamo
+router.post('/', prestamosController.crearPrestamo);
 
+// Devolver un préstamo (por ID)
+router.put('/:id/devolver', prestamosController.devolverPrestamo);
 // Exportar el router
 module.exports = router;
