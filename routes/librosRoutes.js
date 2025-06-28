@@ -10,8 +10,8 @@ router.get('/search', librosController.searchLibros);
 router.get('/:id', librosController.getLibroById);
 
 // Rutas protegidas
-router.use(authenticate);
-router.use(authorize(['admin']));
+//router.use(authenticate);
+//router.use(authorize(['admin']));
 
 router.post('/', validateLibro, librosController.createLibro);
 router.put('/:id', validateLibro, librosController.updateLibro);
